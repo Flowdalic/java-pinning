@@ -1,0 +1,131 @@
+buildscript {
+    repositories {
+		mavenCentral()
+    }
+
+    dependencies {
+		classpath 'com.android.tools.build:gradle:0.14.+'
+    }
+}
+
+apply from: 'version.gradle'
+
+allprojects {
+	ext {
+		gitCommit = getGitCommit()
+		buildDate = getDatestamp()
+		sonatypeCredentialsAvailable = project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+		isReleaseVersion = !isSnapshot
+		signingRequired = isReleaseVersion
+		sonatypeSnapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+		sonatypeStagingUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+		// Returns only the date in yyyy-MM-dd format, as otherwise, with
+		// hh:mm:ss information, the manifest files would change with every
+		// build, causing unnecessary rebuilds.
+		builtDate = (new java.text.SimpleDateFormat("yyyy-MM-dd")).format(new Date())
+		oneLineDesc = 'A Java library for TLS pinning'
+	}
+
+	group = 'eu.geekplace.javapinning'
+	version = shortVersion
+	if (isSnapshot) {
+		version += '-SNAPSHOT'
+	}
+
+	if (JavaVersion.current().isJava8Compatible()) {
+		tasks.withType(Javadoc) {
+			options.addStringOption('Xdoclint:none', '-quiet')
+		}
+	}
+
+}
+
+subprojects {
+	apply plugin: 'maven'
+	apply plugin: 'signing'
+
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				if (signingRequired) {
+					beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+				}
+				repository(url: project.sonatypeStagingUrl) {
+					if (sonatypeCredentialsAvailable) {
+						authentication(userName: sonatypeUsername, password: sonatypePassword)
+					}
+				}
+				snapshotRepository(url: project.sonatypeSnapshotUrl) {
+					if (sonatypeCredentialsAvailable) {
+						authentication(userName: sonatypeUsername, password: sonatypePassword)
+					}
+				}
+
+				pom.project {
+					name 'Java Pinning'
+					description project.oneLineDesc
+					url 'http://androidpinning.geekplace.eu'
+
+					scm {
+						url 'https://github.com/flowdalic/android-pinning'
+						connection 'scm:git@github.com:flowdalic/android-pinning.git'
+						developerConnection 'scm:git@github.com:flowdalic/android-pinning.git'
+					}
+
+					licenses {
+						license {
+							name 'The Apache Software License, Version 2.0'
+							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+							distribution 'repo'
+						}
+					}
+
+					developers {
+						developer {
+							id 'flow'
+							name 'Florian Schmaus'
+						}
+					}
+				}
+			}
+		}
+	}
+
+	signing {
+		required { signingRequired }
+		sign configurations.archives
+	}
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+	if (signingRequired
+		&& taskGraph.allTasks.any { it instanceof Sign }) {
+		// Use Java 6's console to read from the console (no good for a CI environment)
+		Console console = System.console()
+		console.printf '\n\nWe have to sign some things in this build.\n\nPlease enter your signing details.\n\n'
+		def password = console.readPassword('GnuPG Private Key Password: ')
+
+		allprojects { ext.'signing.password' = password }
+
+		console.printf '\nThanks.\n\n'
+	}
+}
+
+def getGitCommit() {
+	def dotGit = new File("$projectDir/.git")
+	if (!dotGit.isDirectory()) return 'non-git build'
+
+	def cmd = 'git describe --always --tags --dirty=+'
+	def proc = cmd.execute()
+	def gitCommit = proc.text.trim()
+	assert !gitCommit.isEmpty()
+	gitCommit
+}
+
+// Returns only the date in yyyy-MM-dd format, as otherwise, with
+// hh:mm:ss information, the manifest files would change with every
+// build, causing unnecessary rebuilds.
+def getDatestamp() {
+	def date = new Date()
+	return date.format('yyyy-MM-dd')
+}

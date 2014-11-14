@@ -1,0 +1,3 @@
+include \
+    'java-pinning-aar' \
+  , 'java-pinning-jar'
