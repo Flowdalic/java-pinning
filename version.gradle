@@ -1,8 +1,8 @@
 allprojects {
 	ext {
-		shortVersion = '1.0.0'
+		shortVersion = '1.0.1-alpha1'
 		// increase versionCode with every release
-		versionCode = 2
-		isSnapshot = false
+		versionCode = 3
+		isSnapshot = true
 	}
 }
