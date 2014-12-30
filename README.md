@@ -8,6 +8,9 @@ There is no additional validation using the system's trust store, i.e. Java Pinn
 This means that as soon as the private key is compromised, an attacker will be able to impersonate the host.
 
 You should only use Java Pinning if you are in control of both ends of the TLS connection, so that you can replace the Pin in case the private key has been compromised.
+To be absolutely clear: **If you need to change the server certificate, you need to change also the PIN in the client**.
+Usually you want to add the new PIN first, before changing the server certificate.
+If you don't add the new PIN, your clients wont be able to connect to your server!
 Please inform yourself about the available alternatives to Java Pinning to determine if your use case is a match for Java Pinning.
 See also the "Alternatives" section in this README.
 
