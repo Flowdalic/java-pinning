@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014 Florian Schmaus
+ * Copyright 2014-2015 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package eu.geekplace.javapinning;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,8 +35,7 @@ public class JavaPinning {
 
 	public static X509TrustManager trustManagerForPin(String pinString) {
 		Pin pin = Pin.fromString(pinString);
-		List<Pin> pins = new ArrayList<Pin>(1);
-		pins.add(pin);
+		List<Pin> pins = Arrays.asList(pin);
 		return trustManagerforPins(pins);
 	}
 
