@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import eu.geekplace.javapinning.pin.Pin;
 
@@ -32,14 +33,14 @@ public class JavaPinning {
 
 	public static final String TLS = "TLS";
 
-	public static TrustManager trustManagerForPin(String pinString) {
+	public static X509TrustManager trustManagerForPin(String pinString) {
 		Pin pin = Pin.fromString(pinString);
 		List<Pin> pins = new ArrayList<Pin>(1);
 		pins.add(pin);
 		return trustManagerforPins(pins);
 	}
 
-	public static TrustManager trustManagerforPins(Collection<Pin> pins) {
+	public static X509TrustManager trustManagerforPins(Collection<Pin> pins) {
 		return new PinningTrustManager(pins);
 	}
 

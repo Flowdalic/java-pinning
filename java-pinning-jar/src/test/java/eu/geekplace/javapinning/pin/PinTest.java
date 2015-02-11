@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import eu.geekplace.javapinning.util.JavaPinningUtil;
 
 public class PinTest {
 
@@ -29,12 +30,9 @@ public class PinTest {
 	public void pinWithFullwidthColon() {
 		Pin pin = Pin.fromString("CERTSHA256:" + PIN_STRING_W_COLON);
 		byte[] pinBytes = pin.getPinBytes();
-		StringBuilder sb = new StringBuilder(PIN_STRING_W_COLON.length());
-		for (byte b : pinBytes) {
-			sb.append(String.format("%02X:", b));
-		}
+		final String pinString = JavaPinningUtil.toHex(pinBytes, true).toString();
 		// String.format() appends a ':' at the very end, so we have to do that too
-		assertEquals(PIN_STRING_W_COLON + ":", sb.toString());
+		assertEquals(PIN_STRING_W_COLON + ":", pinString);
 	}
 
 	@Test
@@ -50,13 +48,10 @@ public class PinTest {
 		}
 		sb.append(PIN_STRING_W_COLON.subSequence(start, PIN_STRING_W_COLON.length()));
 		Pin pin = Pin.fromString("CERTSHA256:" + sb.toString());
-		sb = new StringBuilder(PIN_STRING_W_COLON.length());
 		byte[] pinBytes = pin.getPinBytes();
-		for (byte b : pinBytes) {
-			sb.append(String.format("%02X:", b));
-		}
+		final String pinString = JavaPinningUtil.toHex(pinBytes, true).toString();
 		// String.format() appends a ':' at the very end, so we have to do that too
-		assertEquals(PIN_STRING_W_COLON + ":", sb.toString());
+		assertEquals(PIN_STRING_W_COLON + ":", pinString);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
