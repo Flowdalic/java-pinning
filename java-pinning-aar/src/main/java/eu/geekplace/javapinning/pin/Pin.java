@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014 Florian Schmaus
+ * Copyright 2014-2015 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,8 +42,26 @@ public abstract class Pin {
 	protected final byte[] pinBytes;
 
 	protected Pin(String pinHexString) {
+		// Convert pinHexString to lower case. Note that we don't need to use
+		// the locale argument version of toLowerCase() as we will throw an
+		// exception later anyway when a character ^[a-f0-9] is found
+		pinHexString = pinHexString.toLowerCase();
+		// Replace all ':' and whitespace characters with the empty string, i.e. remove them from pinHexString
+		pinHexString = pinHexString.replaceAll("[:\\s]", "");
+
+		final char[] pinHexChars = pinHexString.toCharArray();
+		// Check that pinHexChars only contains chars [a-f0-9]
+		for (char c : pinHexChars) {
+			// Throw exception if char is ^[a-f0-9]
+			if (! ((c >= 'a' && c <= 'f') || (c >= '0' && c <= '9'))) {
+				throw new IllegalArgumentException(
+						"Pin String must only contain whitespaces, semicolons (':'), and ASCII letters [a-fA-F] and numbers [0-9], found offending char: '"
+								+ c + "'");
+			}
+		}
+
 		// Convert the pinHexString to bytes
-		int len = pinHexString.length();
+		final int len = pinHexChars.length;
 		pinBytes = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
 			pinBytes[i / 2] = (byte) ((Character.digit(pinHexString.charAt(i), 16) << 4) + Character
@@ -55,8 +73,36 @@ public abstract class Pin {
 
 	protected abstract boolean pinsCertificate(byte[] pubkey);
 
+	/**
+	 * Create a new Pin from the given String.
+	 * <p>
+	 * The Pin String must be in the format <tt>[type]:[hex-string]</tt>, where
+	 * <tt>type</tt> denotes the type of the Pin and <tt>hex-string</tt> is the
+	 * binary value of the Pin encoded in hex. Currently supported types are
+	 * <ul>
+	 * <li>PLAIN</li>
+	 * <li>SHA256</li>
+	 * <li>CERTPLAIN</li>
+	 * <li>CERTSHA256</li>
+	 * </ul>
+	 * The hex-string must contain only of whitespace characters, colons (':'),
+	 * numbers [0-9] and ASCII letters [a-fA-F]. It must be a valid hex-encoded
+	 * binary representation. First the string is lower-cased, then all
+	 * whitespace characters and colons are removed before the string is decoded
+	 * to bytes.
+	 * </p>
+	 *
+	 * @param string
+	 *            the Pin String.
+	 * @return the Pin for the given Pin String.
+	 * @throws IllegalArgumentException
+	 *             if the given String is not a valid Pin String
+	 */
 	public static Pin fromString(String string) {
-		String[] pin = string.split(":");
+		// The Pin's string may have multiple colons (':'), assume that
+		// everything before the first colon is the Pin type and everything
+		// after the colon is the Pin's byte encoded in hex.
+		String[] pin = string.split(":", 2);
 		if (pin.length != 2) {
 			throw new IllegalArgumentException();
 		}
@@ -74,5 +120,17 @@ public abstract class Pin {
 		default:
 			throw new IllegalArgumentException();
 		}
+	}
+
+	/**
+	 * Returns a clone of the bytes that represent this Pin.
+	 * <p>
+	 * This method is meant for unit testing only and therefore not public.
+	 * </p>
+	 *
+	 * @return a clone of the bytes that represent this Pin.
+	 */
+	byte[] getPinBytes() {
+		return pinBytes.clone();
 	}
 }

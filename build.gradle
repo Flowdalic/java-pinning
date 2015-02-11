@@ -44,6 +44,10 @@ subprojects {
 	apply plugin: 'maven'
 	apply plugin: 'signing'
 
+	repositories {
+		mavenCentral()
+	}
+
 	uploadArchives {
 		repositories {
 			mavenDeployer {
