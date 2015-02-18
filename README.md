@@ -90,7 +90,7 @@ Dependency
 ### Gradle
 
 ```groovy
-compile('eu.geekplace.java-pinning:java-pinning-jar:0.1.0')
+compile('eu.geekplace.java-pinning:java-pinning-jar:1.0.1')
 ```
 
 Difference between Public Key Pins and Certificate Pins
