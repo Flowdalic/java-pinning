@@ -14,8 +14,40 @@ If you don't add the new PIN, your clients wont be able to connect to your serve
 Please inform yourself about the available alternatives to Java Pinning to determine if your use case is a match for Java Pinning.
 See also the "Alternatives" section in this README.
 
+Changelog
+---------
+
+### 1.0.1
+
+The Pin format requirements have been relaxed. The Pin string may now contain
+
+- Colons (':')
+- Uppercase characters
+- Spaces
+
 How to use
 ----------
+
+### XMPP Users
+
+If your XMPP service does not provide you the server certificates SHA256 hash or the full certificate over a secure channel, then you could obtain the information for example via `xmpp.net`:
+
+1. Go to [xmpp.net](https://xmpp.net)
+2. Select "Test a server", enter your service name and make sure "c2s" is selected
+3. Press "Check!"
+4. Wait a bit until the information in the "Certificates" section appears
+5. The first certificate ("#0") is the one of your service. In the "Details" section select SHA-256
+6. Copy the SHA-256 hash, e.g. `83:F9:17:1E:06:A3:13:11:88:89:F7:D7:93:02:BD:1B:7A:20:42:EE:0C:FD:02:9A:BF:8D:D0:6F:FA:6C:D9:D3`
+7. Java Pinning versions < 1.0.1 require the colons to be removed and the letters to be lowercase. This transformation could be done with the following bash script
+
+```bash
+$ pin=83:F9:17:1E:06:A3:13:11:88:89:F7:D7:93:02:BD:1B:7A:20:42:EE:0C:FD:02:9A:BF:8D:D0:6F:FA:6C:D9:D3
+$ echo $pin | tr '[:upper:]' '[:lower:]' | tr -d :
+```
+
+8. Create the Java Pinning Pin String by prefixing `CERTSHA256` to the Pin. Thus our example SHA256 value becomes `CERTSHA256:83:F9:17:1E:06:A3:13:11:88:89:F7:D7:93:02:BD:1B:7A:20:42:EE:0C:FD:02:9A:BF:8D:D0:6F:FA:6C:D9:D3`
+
+### HTTPS (and other services using TLS right from the start)
 
 ```bash
 $ ./tools/pin.py example.org 443
