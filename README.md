@@ -84,8 +84,8 @@ XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
   .setCustomSSLContext(sc).build();
 ```
 
-Dependency
-----------
+How to add this as dependency
+-----------------------------
 
 ### Gradle
 
