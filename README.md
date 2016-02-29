@@ -84,13 +84,23 @@ XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
   .setCustomSSLContext(sc).build();
 ```
 
-Dependency
-----------
+How to add this as dependency
+-----------------------------
 
 ### Gradle
 
 ```groovy
 compile('eu.geekplace.java-pinning:java-pinning-jar:1.0.1')
+```
+
+### Maven
+
+```xml
+<dependency>
+	<groupId>eu.geekplace.javapinning</groupId>
+	<artifactId>java-pinning-jar</artifactId>
+	<version>1.0.1</version>
+</dependency>
 ```
 
 Difference between Public Key Pins and Certificate Pins
