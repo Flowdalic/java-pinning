@@ -5,6 +5,6 @@ allprojects {
 		// versionCode format:
 		// <two-digits-major><two-digits-minor><two-digits-patch><two-digits-identifier>
 		versionCode = 01010001
-		isSnapshot = true
+		isSnapshot = false
 	}
 }
