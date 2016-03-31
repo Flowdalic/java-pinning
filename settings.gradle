@@ -1,3 +1,4 @@
 include \
     'java-pinning-aar' \
-  , 'java-pinning-jar'
+  , 'java-pinning-jar' \
+  , 'java-pinning-java7'

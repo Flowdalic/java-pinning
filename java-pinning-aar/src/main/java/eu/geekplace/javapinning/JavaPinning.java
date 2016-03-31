@@ -33,33 +33,62 @@ public class JavaPinning {
 
 	public static final String TLS = "TLS";
 
+	public static final JavaPinning INSTANCE = new JavaPinning();
+
 	public static X509TrustManager trustManagerForPin(String pinString) {
-		Pin pin = Pin.fromString(pinString);
-		List<Pin> pins = Arrays.asList(pin);
-		return trustManagerforPins(pins);
+		return INSTANCE.tmForPin(pinString);
 	}
 
 	public static X509TrustManager trustManagerforPins(Collection<Pin> pins) {
-		return new PinningTrustManager(pins);
+		return INSTANCE.tmForPins(pins);
 	}
 
 	public static SSLContext forPin(String pinString) throws KeyManagementException,
 			NoSuchAlgorithmException {
-		TrustManager trustManager = trustManagerForPin(pinString);
-		return fromTrustManager(trustManager);
+		return INSTANCE.ctxForPin(pinString);
 	}
 
 	public static SSLContext forPins(Collection<Pin> pins) throws KeyManagementException,
 			NoSuchAlgorithmException {
-		TrustManager trustManager = new PinningTrustManager(pins);
+		return INSTANCE.ctxForPins(pins);
+	}
+
+	protected JavaPinning() {
+	}
+
+	protected final X509TrustManager tmForPin(String pinString) {
+		Pin pin = Pin.fromString(pinString);
+		List<Pin> pins = Arrays.asList(pin);
+		return tmForPins(pins);
+	}
+
+	protected final X509TrustManager tmForPins(Collection<Pin> pins) {
+		PinningTrustManager pinningTrustManager = new PinningTrustManager(pins);
+		X509TrustManager trustManager = eventuallySpecialize(pinningTrustManager);
+		return trustManager;
+	}
+
+	protected final SSLContext ctxForPin(String pinString) throws KeyManagementException,
+			NoSuchAlgorithmException {
+		TrustManager trustManager = tmForPin(pinString);
 		return fromTrustManager(trustManager);
 	}
 
-	private static SSLContext fromTrustManager(TrustManager trustManager)
+	protected final SSLContext ctxForPins(Collection<Pin> pins) throws KeyManagementException,
+			NoSuchAlgorithmException {
+		TrustManager trustManager = tmForPins(pins);
+		return fromTrustManager(trustManager);
+	}
+
+	private static final SSLContext fromTrustManager(TrustManager trustManager)
 			throws NoSuchAlgorithmException, KeyManagementException {
 		TrustManager[] trustManagers = new TrustManager[] { trustManager };
 		SSLContext sslContext = SSLContext.getInstance(TLS);
 		sslContext.init(null, trustManagers, new SecureRandom());
 		return sslContext;
+	}
+
+	protected X509TrustManager eventuallySpecialize(PinningTrustManager pinningTrustManager) {
+		return pinningTrustManager;
 	}
 }

@@ -10,22 +10,82 @@ buildscript {
 
 apply from: 'version.gradle'
 
-allprojects {
-	ext {
-		gitCommit = getGitCommit()
-		buildDate = getDatestamp()
-		sonatypeCredentialsAvailable = project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
-		isReleaseVersion = !isSnapshot
-		signingRequired = isReleaseVersion
-		sonatypeSnapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
-		sonatypeStagingUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-		// Returns only the date in yyyy-MM-dd format, as otherwise, with
-		// hh:mm:ss information, the manifest files would change with every
-		// build, causing unnecessary rebuilds.
-		builtDate = (new java.text.SimpleDateFormat("yyyy-MM-dd")).format(new Date())
-		oneLineDesc = 'A Java library for TLS pinning'
+ext {
+	gitCommit = getGitCommit()
+	buildDate = getDatestamp()
+	sonatypeCredentialsAvailable = project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+	isReleaseVersion = !isSnapshot
+	signingRequired = isReleaseVersion
+	sonatypeSnapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+	sonatypeStagingUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+	// Returns only the date in yyyy-MM-dd format, as otherwise, with
+	// hh:mm:ss information, the manifest files would change with every
+	// build, causing unnecessary rebuilds.
+	builtDate = (new java.text.SimpleDateFormat("yyyy-MM-dd")).format(new Date())
+	oneLineDesc = 'A Java library for TLS pinning'
+	androidProjects = [
+		':java-pinning-aar'
+	].collect{ project(it) }
+	javaProjects = subprojects - androidProjects
+}
+
+configure(javaProjects) {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	apply plugin: 'osgi'
+	// We need to apply the 'maven' plugin here too, as otherwise the
+	// dependencies of java-pinngin-java7 won't be set correctly, e.g
+	// the dependency on java-pinning-jar won't be set.
+	apply plugin: 'maven'
+
+	eclipse {
+		classpath {
+			downloadJavadoc = true
+		}
 	}
 
+	task sourcesJar(type: Jar, dependsOn: classes) {
+		classifier = 'sources'
+		from sourceSets.main.allSource
+	}
+
+	task javadocJar(type: Jar, dependsOn: javadoc) {
+		classifier = 'javadoc'
+		from javadoc.destinationDir
+	}
+
+	artifacts {
+		archives sourcesJar
+		archives javadocJar
+	}
+
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				pom {
+					project {
+						packaging 'jar'
+					}
+				}
+			}
+		}
+	}
+
+	jar {
+		manifest {
+			attributes(
+			'Implementation-Version': version,
+			'Implementation-GitRevision': project.gitCommit,
+			'Built-Date': project.buildDate,
+			'Built-JDK': System.getProperty('java.version'),
+			'Built-Gradle': gradle.gradleVersion,
+			'Built-By': System.getProperty('user.name')
+			)
+		}
+	}
+}
+
+allprojects {
 	group = 'eu.geekplace.javapinning'
 	version = shortVersion
 	if (isSnapshot) {
