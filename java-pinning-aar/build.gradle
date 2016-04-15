@@ -10,7 +10,7 @@ android {
 		minSdkVersion 1
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility = javaCompatibility
 		targetCompatibility project.sourceCompatibility
     }
 }

@@ -27,6 +27,7 @@ ext {
 		':java-pinning-aar'
 	].collect{ project(it) }
 	javaProjects = subprojects - androidProjects
+	javaCompatibility = JavaVersion.VERSION_1_7
 }
 
 configure(javaProjects) {
@@ -37,6 +38,9 @@ configure(javaProjects) {
 	// dependencies of java-pinngin-java7 won't be set correctly, e.g
 	// the dependency on java-pinning-jar won't be set.
 	apply plugin: 'maven'
+
+	sourceCompatibility = javaCompatibility
+	targetCompatibility = sourceCompatibility
 
 	eclipse {
 		classpath {
