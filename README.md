@@ -147,3 +147,19 @@ Android Pinning (AP) does additional validate the pinned certificate by using th
 It provides probably the best level of security, as it additionally strengthens PKI with pinning.
 As the name suggests, Android Pinning is only available for Android.
 The fact that the last commit date is June 2013 makes it questionable if the project is still actively maintained.
+
+
+Build Instructions
+==================
+
+Build with
+
+```bash
+gradle build
+```
+
+Run tests with
+
+```bash
+gradle check
+```
