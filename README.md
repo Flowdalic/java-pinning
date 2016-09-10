@@ -90,7 +90,7 @@ How to add this as dependency
 ### Gradle
 
 ```groovy
-compile('eu.geekplace.java-pinning:java-pinning-jar:1.0.1')
+compile('eu.geekplace.javapinning:java-pinning-jar:1.0.1')
 ```
 
 ### Maven
