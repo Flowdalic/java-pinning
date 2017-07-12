@@ -16,16 +16,21 @@
  */
 package eu.geekplace.javapinning.pin;
 
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
+
+import eu.geekplace.javapinning.util.X509CertificateUtilities;
 
 public class CertPlainPin extends CertPin {
 
+	private final X509Certificate certificate;
 
 	protected CertPlainPin(String pinHexString) {
 		super(pinHexString);
 		if (sha256md == null) {
 			throw new IllegalStateException("Can not create sha256 pins");
 		}
+		this.certificate = X509CertificateUtilities.decodeX509Certificate(pinBytes);
 	}
 
 	@Override
@@ -33,4 +38,7 @@ public class CertPlainPin extends CertPin {
 		return Arrays.equals(pinBytes, certificate);
 	}
 
+	public X509Certificate getX509Certificate(){
+		return certificate;
+	}
 }
