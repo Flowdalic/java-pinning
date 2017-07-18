@@ -25,9 +25,23 @@ public class PlainPin extends PublicKeyPin {
 
 	private final PublicKey publicKey;
 
+	protected PlainPin(PublicKey publicKey) {
+		super(publicKey.getEncoded());
+		this.publicKey = publicKey;
+	}
+
 	protected PlainPin(String pinHexString) {
 		super(pinHexString);
 		this.publicKey = X509CertificateUtilities.decodeX509PublicKey(pinBytes);
+	}
+
+	/**
+	 * Create a new {@link Pin} from the given {@link PublicKey}.
+	 * @param publicKey the public-key to create a {@link Pin} for.
+	 * @return the {@link Pin} for the given certificate.
+	 */
+	public static PlainPin fromPublicKey(PublicKey publicKey) {
+		return new PlainPin(publicKey);
 	}
 
 	@Override

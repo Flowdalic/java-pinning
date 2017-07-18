@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 public class CertSha256Pin extends CertPin {
 
-
 	protected CertSha256Pin(String pinHexString) {
 		super(pinHexString);
 	}

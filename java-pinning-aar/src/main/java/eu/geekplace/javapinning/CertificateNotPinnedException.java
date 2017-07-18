@@ -14,27 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.geekplace.javapinning.pin;
+package eu.geekplace.javapinning;
 
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
+import java.security.cert.CertificateException;
 
-public abstract class CertPin extends Pin {
+/**
+ * This exception is thrown if the {@link PinningTrustManager} encounters a certificate that has not
+ * been pinned.
+ */
+public class CertificateNotPinnedException extends CertificateException {
 
-	protected CertPin(byte[] pinBytes) {
-		super(pinBytes);
-	}
-
-	protected CertPin(String pinHexString) {
-		super(pinHexString);
-	}
-
-	@Override
-	public boolean pinsCertificate(X509Certificate x509certificate) throws CertificateEncodingException {
-		byte[] pubkey = x509certificate.getEncoded();
-		return pinsCertificate(pubkey);
-	}
-
-	protected abstract boolean pinsCertificate(byte[] certificate);
-
+    public CertificateNotPinnedException(String message) {
+        super(message);
+    }
 }

@@ -20,10 +20,15 @@ import java.security.cert.X509Certificate;
 
 public abstract class PublicKeyPin extends Pin {
 
+	protected PublicKeyPin(byte[] encoded) {
+		super(encoded);
+	}
+
 	protected PublicKeyPin(String pinHexString) {
 		super(pinHexString);
 	}
 
+	@Override
 	public boolean pinsCertificate(X509Certificate x509certificate) {
 		byte[] pubkey = x509certificate.getPublicKey().getEncoded();
 		return pinsCertificate(pubkey);

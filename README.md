@@ -17,6 +17,18 @@ See also the "Alternatives" section in this README.
 Changelog
 ---------
 
+### Upcoming Version
+
+- Added support for the Java 7 `X509ExtendedTrustManager` if your project uses Java 7 please use `Java7Pinning` instead of `JavaPinning`.
+- Two new factory methods `JavaPinning.trustManagerForPins(String...)` and `JavaPinning.forPins(String...)`.
+- Deprecated `JavaPinning.trustManagerforpins()` in favor of the correctly named `JavaPinning.trustManagerForpins()`.
+- Two new factory methods `CertPlainPin.fromCertificate` and `PlainPin.fromPublicKey` these methods can be used to directly create pins from X509 certificates or X509 public keys.
+- Two new getter methods `CertPlainPin.getX509Certificate()` and `PlainPin.getPublicKey()`.
+- Two new factory methods in `JavaPinning`
+- The `PinningTrustManager` now throws a specialized exception when a certificate is not pinned `CertificateNotPinnedException` which is a sub-type of `CertificateException`, this allows you to differentiate pinning exceptions from other certificate related exceptions.
+- New class `HexUtilities` which contains methods to decode from HEX to bytes and encode bytes to HEX
+- The `JavaPinningUtil` class has been deprecated in favor of `HexUtilities`, beaware of the fact that the methods in `HexUtilities` behave slightly better, but different).
+
 ### 1.0.1
 
 The Pin format requirements have been relaxed. The Pin string may now contain
