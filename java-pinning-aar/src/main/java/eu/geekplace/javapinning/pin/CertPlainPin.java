@@ -16,6 +16,7 @@
  */
 package eu.geekplace.javapinning.pin;
 
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
@@ -24,6 +25,11 @@ import eu.geekplace.javapinning.util.X509CertificateUtilities;
 public class CertPlainPin extends CertPin {
 
 	private final X509Certificate certificate;
+
+	protected CertPlainPin(X509Certificate certificate) throws CertificateEncodingException {
+		super(certificate.getEncoded());
+		this.certificate = certificate;
+	}
 
 	protected CertPlainPin(String pinHexString) {
 		super(pinHexString);

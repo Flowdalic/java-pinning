@@ -33,7 +33,7 @@ public class PinningTrustManagerTest {
 
 	private static final X509Certificate[] DUMMY_CHAIN = new X509Certificate[] {X509CertificateUtilities.decodeX509Certificate(HexUtilities.decodeFromHex(TestUtilities.PLAIN_CERTIFICATE_1))};
 
-	@Test(expected = CertificateException.class)
+	@Test(expected = CertificateNotPinnedException.class)
 	public void shouldThrowIfNotPinned() throws CertificateException {
 		X509TrustManager tm = JavaPinning.trustManagerForPin("CERTPLAIN:" + TestUtilities.PLAIN_CERTIFICATE_2);
 		tm.checkServerTrusted(DUMMY_CHAIN, "");

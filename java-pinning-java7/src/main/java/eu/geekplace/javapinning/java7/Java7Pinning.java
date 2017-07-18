@@ -32,12 +32,29 @@ public class Java7Pinning extends JavaPinning {
 
 	private static final Java7Pinning INSTANCE = new Java7Pinning();
 
+	public static X509TrustManager trustManagerForPins(String... pinStrings) {
+		return INSTANCE.tmForPins(pinStrings);
+	}
+
 	public static X509TrustManager trustManagerForPin(String pinString) {
 		return INSTANCE.tmForPin(pinString);
 	}
 
+	public static X509TrustManager trustManagerForPins(Collection<Pin> pins) {
+		return INSTANCE.tmForPins(pins);
+	}
+
+	/**
+	 * @deprecated Please use the correctly named: {@link #trustManagerForPins(Collection)}
+	 */
+	@Deprecated
 	public static X509TrustManager trustManagerforPins(Collection<Pin> pins) {
 		return INSTANCE.tmForPins(pins);
+	}
+
+	public static SSLContext forPins(String... pinString) throws KeyManagementException,
+			NoSuchAlgorithmException {
+		return INSTANCE.ctxForPins(pinString);
 	}
 
 	public static SSLContext forPin(String pinString) throws KeyManagementException,

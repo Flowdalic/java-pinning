@@ -18,6 +18,7 @@ package eu.geekplace.javapinning.pin;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
@@ -43,6 +44,10 @@ public abstract class Pin {
 
 	protected final byte[] pinBytes;
 
+	protected Pin(byte[] pinBytes){
+		this.pinBytes = pinBytes;
+	}
+
 	protected Pin(String pinHexString) {
 		pinBytes = HexUtilities.decodeFromHex(pinHexString);
 	}
@@ -52,7 +57,7 @@ public abstract class Pin {
 	protected abstract boolean pinsCertificate(byte[] pubkey);
 
 	/**
-	 * Create a new Pin from the given String.
+	 * Create a new {@link Pin} from the given String.
 	 * <p>
 	 * The Pin String must be in the format <tt>[type]:[hex-string]</tt>, where
 	 * <tt>type</tt> denotes the type of the Pin and <tt>hex-string</tt> is the
@@ -98,6 +103,25 @@ public abstract class Pin {
 		default:
 			throw new IllegalArgumentException();
 		}
+	}
+
+	/**
+	 * Create a new "plain certificate" {@link Pin} from the given {@link X509Certificate}.
+	 * @param certificate the certificate to create a {@link Pin} for.
+	 * @return the {@link Pin} for the given certificate.
+	 * @throws CertificateEncodingException if the given certificate could not be encoded.
+	 */
+	public static CertPlainPin fromCertificate(X509Certificate certificate) throws CertificateEncodingException {
+		return new CertPlainPin(certificate);
+	}
+
+	/**
+	 * Create a new {@link Pin} from the given {@link PublicKey}.
+	 * @param publicKey the public-key to create a {@link Pin} for.
+	 * @return the {@link Pin} for the given certificate.
+	 */
+	public static PlainPin fromPublicKey(PublicKey publicKey) {
+		return new PlainPin(publicKey);
 	}
 
 	/**
