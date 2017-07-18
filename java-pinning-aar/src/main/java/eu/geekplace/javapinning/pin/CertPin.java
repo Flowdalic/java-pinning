@@ -21,6 +21,10 @@ import java.security.cert.X509Certificate;
 
 public abstract class CertPin extends Pin {
 
+	protected CertPin(byte[] pinBytes) {
+		super(pinBytes);
+	}
+
 	protected CertPin(String pinHexString) {
 		super(pinHexString);
 	}

@@ -19,6 +19,7 @@ package eu.geekplace.javapinning;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -35,12 +36,29 @@ public class JavaPinning {
 
 	public static final JavaPinning INSTANCE = new JavaPinning();
 
+	public static X509TrustManager trustManagerForPins(String... pinStrings) {
+		return INSTANCE.tmForPins(pinStrings);
+	}
+
 	public static X509TrustManager trustManagerForPin(String pinString) {
 		return INSTANCE.tmForPin(pinString);
 	}
 
-	public static X509TrustManager trustManagerforPins(Collection<Pin> pins) {
+	public static X509TrustManager trustManagerForPins(Collection<Pin> pins){
 		return INSTANCE.tmForPins(pins);
+	}
+
+	/**
+	 * @deprecated Please use the correctly named: {@link #trustManagerForPins(Collection)}
+	 */
+	@Deprecated
+	public static X509TrustManager trustManagerforPins(Collection<Pin> pins) {
+		return trustManagerforPins(pins);
+	}
+
+	public static SSLContext forPins(String... pinStrings) throws KeyManagementException,
+			NoSuchAlgorithmException {
+		return INSTANCE.ctxForPins(pinStrings);
 	}
 
 	public static SSLContext forPin(String pinString) throws KeyManagementException,
@@ -57,8 +75,14 @@ public class JavaPinning {
 	}
 
 	protected final X509TrustManager tmForPin(String pinString) {
-		Pin pin = Pin.fromString(pinString);
-		List<Pin> pins = Arrays.asList(pin);
+		return tmForPins(pinString);
+	}
+
+	protected final X509TrustManager tmForPins(String... pinStrings) {
+		List<Pin> pins = new ArrayList<>(pinStrings.length);
+		for(String pin: pinStrings){
+			pins.add(Pin.fromString(pin));
+		}
 		return tmForPins(pins);
 	}
 
@@ -68,10 +92,15 @@ public class JavaPinning {
 		return trustManager;
 	}
 
+	protected final SSLContext ctxForPins(String... pinStrings) throws KeyManagementException,
+			NoSuchAlgorithmException {
+		TrustManager trustManager = tmForPins(pinStrings);
+		return fromTrustManager(trustManager);
+	}
+
 	protected final SSLContext ctxForPin(String pinString) throws KeyManagementException,
 			NoSuchAlgorithmException {
-		TrustManager trustManager = tmForPin(pinString);
-		return fromTrustManager(trustManager);
+		return ctxForPins(pinString);
 	}
 
 	protected final SSLContext ctxForPins(Collection<Pin> pins) throws KeyManagementException,
