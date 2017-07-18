@@ -17,22 +17,24 @@
 package eu.geekplace.javapinning.pin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import eu.geekplace.javapinning.util.JavaPinningUtil;
+import eu.geekplace.javapinning.TestUtilities;
+import eu.geekplace.javapinning.util.HexUtilities;
 
 public class PinTest {
 
-	public static final String PIN_STRING_W_COLON = "83:F9:17:1E:06:A3:13:11:88:89:F7:D7:93:02:BD:1B:7A:20:42:EE:0C:FD:02:9A:BF:8D:D0:6F:FA:6C:D9:D3";
+	private static final String PIN_STRING_W_COLON = "83:F9:17:1E:06:A3:13:11:88:89:F7:D7:93:02:BD:1B:7A:20:42:EE:0C:FD:02:9A:BF:8D:D0:6F:FA:6C:D9:D3";
 
 	@Test
 	public void pinWithFullwidthColon() {
 		Pin pin = Pin.fromString("CERTSHA256:" + PIN_STRING_W_COLON);
 		byte[] pinBytes = pin.getPinBytes();
-		final String pinString = JavaPinningUtil.toHex(pinBytes, true).toString();
+		final String pinString = HexUtilities.encodeToHex(pinBytes, true, true);
 		// String.format() appends a ':' at the very end, so we have to do that too
-		assertEquals(PIN_STRING_W_COLON + ":", pinString);
+		assertEquals(PIN_STRING_W_COLON, pinString);
 	}
 
 	@Test
@@ -49,9 +51,9 @@ public class PinTest {
 		sb.append(PIN_STRING_W_COLON.subSequence(start, PIN_STRING_W_COLON.length()));
 		Pin pin = Pin.fromString("CERTSHA256:" + sb.toString());
 		byte[] pinBytes = pin.getPinBytes();
-		final String pinString = JavaPinningUtil.toHex(pinBytes, true).toString();
+		final String pinString = HexUtilities.encodeToHex(pinBytes, true, true);
 		// String.format() appends a ':' at the very end, so we have to do that too
-		assertEquals(PIN_STRING_W_COLON + ":", pinString);
+		assertEquals(PIN_STRING_W_COLON, pinString);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -64,5 +66,17 @@ public class PinTest {
 	public void pinWithnonAsciiLetters() {
 		final String pinString = "αΒΕGλ";
 		Pin.fromString("SHA256:" + pinString);
+	}
+
+	@Test
+	public void fromString_plainCertHexString_returnsCertPlainPin(){
+		CertPlainPin plainPin = (CertPlainPin) Pin.fromString("CERTPLAIN:" + TestUtilities.PLAIN_CERTIFICATE_1);
+		assertNotNull(plainPin.getX509Certificate());
+	}
+
+	@Test
+	public void fromString_plainPinHexString_returnsPlainPin(){
+		PlainPin plainPin = (PlainPin) Pin.fromString("PLAIN:" + TestUtilities.PLAIN_PUBLIC_KEY_1);
+		assertNotNull(plainPin.getPublicKey());
 	}
 }

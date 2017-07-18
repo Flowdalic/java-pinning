@@ -23,6 +23,8 @@ import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import eu.geekplace.javapinning.util.HexUtilities;
+
 public abstract class Pin {
 
 	private static final Logger LOGGER = Logger.getLogger(Sha256Pin.class.getName());
@@ -42,31 +44,7 @@ public abstract class Pin {
 	protected final byte[] pinBytes;
 
 	protected Pin(String pinHexString) {
-		// Convert pinHexString to lower case. Note that we don't need to use
-		// the locale argument version of toLowerCase() as we will throw an
-		// exception later anyway when a character ^[a-f0-9] is found
-		pinHexString = pinHexString.toLowerCase();
-		// Replace all ':' and whitespace characters with the empty string, i.e. remove them from pinHexString
-		pinHexString = pinHexString.replaceAll("[:\\s]", "");
-
-		final char[] pinHexChars = pinHexString.toCharArray();
-		// Check that pinHexChars only contains chars [a-f0-9]
-		for (char c : pinHexChars) {
-			// Throw exception if char is ^[a-f0-9]
-			if (! ((c >= 'a' && c <= 'f') || (c >= '0' && c <= '9'))) {
-				throw new IllegalArgumentException(
-						"Pin String must only contain whitespaces, semicolons (':'), and ASCII letters [a-fA-F] and numbers [0-9], found offending char: '"
-								+ c + "'");
-			}
-		}
-
-		// Convert the pinHexString to bytes
-		final int len = pinHexChars.length;
-		pinBytes = new byte[len / 2];
-		for (int i = 0; i < len; i += 2) {
-			pinBytes[i / 2] = (byte) ((Character.digit(pinHexString.charAt(i), 16) << 4) + Character
-					.digit(pinHexString.charAt(i + 1), 16));
-		}
+		pinBytes = HexUtilities.decodeFromHex(pinHexString);
 	}
 
 	public abstract boolean pinsCertificate(X509Certificate x509certificate) throws CertificateEncodingException;
@@ -104,7 +82,7 @@ public abstract class Pin {
 		// after the colon is the Pin's byte encoded in hex.
 		String[] pin = string.split(":", 2);
 		if (pin.length != 2) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Invalid pin string, expected: 'format-specifier:hex-string'.");
 		}
 		String type = pin[0];
 		String pinHex = pin[1];

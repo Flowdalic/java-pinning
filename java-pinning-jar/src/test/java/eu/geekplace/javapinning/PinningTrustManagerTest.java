@@ -16,38 +16,38 @@
  */
 package eu.geekplace.javapinning;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
 
-import org.junit.Test;
+import eu.geekplace.javapinning.util.HexUtilities;
+import eu.geekplace.javapinning.util.X509CertificateUtilities;
 
-import eu.geekplace.javapinning.util.JavaPinningUtil;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class PinningTrustManagerTest {
 
-	private static final DummyX509Certificate DUMMY_LEAF_CERTIFICATE = new DummyX509Certificate();
-	private static final X509Certificate[] DUMMY_CHAIN = new X509Certificate[] { DUMMY_LEAF_CERTIFICATE };
+	private static final X509Certificate[] DUMMY_CHAIN = new X509Certificate[] {X509CertificateUtilities.decodeX509Certificate(HexUtilities.decodeFromHex(TestUtilities.PLAIN_CERTIFICATE_1))};
 
 	@Test(expected = CertificateException.class)
 	public void shouldThrowIfNotPinned() throws CertificateException {
-		X509TrustManager tm = JavaPinning.trustManagerForPin("CERTPLAIN:abba");
+		X509TrustManager tm = JavaPinning.trustManagerForPin("CERTPLAIN:" + TestUtilities.PLAIN_CERTIFICATE_2);
 		tm.checkServerTrusted(DUMMY_CHAIN, "");
 	}
 
 	@Test
 	public void shouldReportPinIfNotPinned() {
-		X509TrustManager tm = JavaPinning.trustManagerForPin("CERTPLAIN:abba");
+		X509TrustManager tm = JavaPinning.trustManagerForPin("CERTPLAIN:" + TestUtilities.PLAIN_CERTIFICATE_2);
 		try {
 			tm.checkServerTrusted(DUMMY_CHAIN, "");
 			fail();
 		} catch (CertificateException e) {
 			// Assert that the message of the exception contains a hint how to pin the certificate
-			final String dummyCertPin = "CERTPLAIN:" + JavaPinningUtil.toHex(DUMMY_LEAF_CERTIFICATE.getEncoded(), false, false);
+			final String dummyCertPin = "CERTPLAIN:" + TestUtilities.PLAIN_CERTIFICATE_1;
 			assertTrue(e.getMessage().contains(dummyCertPin));
 		}
 	}

@@ -16,12 +16,18 @@
  */
 package eu.geekplace.javapinning.pin;
 
+import java.security.PublicKey;
 import java.util.Arrays;
+
+import eu.geekplace.javapinning.util.X509CertificateUtilities;
 
 public class PlainPin extends PublicKeyPin {
 
+	private final PublicKey publicKey;
+
 	protected PlainPin(String pinHexString) {
 		super(pinHexString);
+		this.publicKey = X509CertificateUtilities.decodeX509PublicKey(pinBytes);
 	}
 
 	@Override
@@ -29,4 +35,7 @@ public class PlainPin extends PublicKeyPin {
 		return Arrays.equals(pinBytes, pubkey);
 	}
 
+	public PublicKey getPublicKey(){
+		return publicKey;
+	}
 }

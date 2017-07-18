@@ -16,31 +16,29 @@
  */
 package eu.geekplace.javapinning.util;
 
+/**
+ * @deprecated Please use {@link HexUtilities}.
+ */
+@Deprecated
 public class JavaPinningUtil {
 
-	public static StringBuilder toHex(byte[] bytes, boolean uppercase) {
-		return toHex(bytes, uppercase, true);
-	}
+    /**
+     * @deprecated This method appends an unnecessary colon to the end of the HEX String, please
+     * use {@link HexUtilities#encodeToHex(byte[])} instead, which does not do this.
+     */
+    @Deprecated
+    public static StringBuilder toHex(byte[] bytes, boolean uppercase) {
+        return new StringBuilder(HexUtilities.encodeToHex(bytes, uppercase, true) + ":");
+    }
 
-	public static StringBuilder toHex(byte[] bytes, boolean uppercase, boolean colonSeparator) {
-		final StringBuilder formatStringBuilder = new StringBuilder(6);
-		formatStringBuilder.append("%02");
-
-		if (uppercase) {
-			formatStringBuilder.append('X');
-		} else {
-			formatStringBuilder.append('x');
-		}
-
-		if (colonSeparator) {
-			formatStringBuilder.append(':');
-		}
-
-		final String formatString = formatStringBuilder.toString();
-		final StringBuilder sb = new StringBuilder(bytes.length);
-		for (byte b : bytes) {
-			sb.append(String.format(formatString, b));
-		}
-		return sb;
-	}
+    /**
+     * @deprecated This method appends an unnecessary colon to the end of the HEX String if
+     * colonSeparator is set to true, please use
+     * {@link HexUtilities#encodeToHex(byte[], boolean, boolean)} instead, which does not do this.
+     */
+    @Deprecated
+    public static StringBuilder toHex(byte[] bytes, boolean uppercase, boolean colonSeparator) {
+        return new StringBuilder(HexUtilities.encodeToHex(bytes, uppercase, colonSeparator) +
+                (colonSeparator?":":""));
+    }
 }

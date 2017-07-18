@@ -24,6 +24,7 @@ import java.util.Collection;
 import javax.net.ssl.X509TrustManager;
 
 import eu.geekplace.javapinning.pin.Pin;
+import eu.geekplace.javapinning.util.HexUtilities;
 import eu.geekplace.javapinning.util.JavaPinningUtil;
 
 public class PinningTrustManager implements X509TrustManager {
@@ -51,7 +52,7 @@ public class PinningTrustManager implements X509TrustManager {
 		// use CERTPLAIN, which tends to be long, so colons as separator are of
 		// no use and most other software UIs show the "public key" without
 		// colons (and using lowercase letters).
-		final StringBuilder pinHexString = JavaPinningUtil.toHex(leafCertificate.getEncoded(), false, false);
+		final String pinHexString = HexUtilities.encodeToHex(leafCertificate.getEncoded());
 		throw new CertificateException("Certificate not pinned. Use 'CERTPLAIN:" + pinHexString
 				+ "' to pin this certificate. But only pin the certificate if you are sure this is the correct certificate!");
 	}
