@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014-2015 Florian Schmaus
+ * Copyright 2014-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public final class X509CertificateUtilities {
         try {
             final CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
             return (X509Certificate) certFactory.generateCertificate(new ByteArrayInputStream(encodedCertificate));
-        } catch(CertificateException e){
+        } catch (CertificateException e) {
             throw new IllegalArgumentException("Byte array cannot be decoded", e);
         }
     }
@@ -53,7 +53,7 @@ public final class X509CertificateUtilities {
         try {
             final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             return keyFactory.generatePublic(new X509EncodedKeySpec(encodedPublicKeyBytes));
-        } catch(NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new IllegalArgumentException("Byte array cannot be decoded", e);
         }
     }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014 Florian Schmaus
+ * Copyright 2014-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public class CertPlainPin extends CertPin {
 		return Arrays.equals(pinBytes, certificate);
 	}
 
-	public X509Certificate getX509Certificate(){
+	public X509Certificate getX509Certificate() {
 		return certificate;
 	}
 }

@@ -29,6 +29,7 @@ ext {
 	].collect{ project(it) }
 	javaProjects = subprojects - androidProjects
 	javaCompatibility = JavaVersion.VERSION_1_7
+	rootConfigDir = new File(rootDir, 'config')
 }
 
 configure(javaProjects) {
@@ -108,6 +109,7 @@ allprojects {
 subprojects {
 	apply plugin: 'maven'
 	apply plugin: 'signing'
+	apply plugin: 'checkstyle'
 
 	repositories {
 		mavenCentral()
@@ -163,6 +165,11 @@ subprojects {
 	signing {
 		required { signingRequired }
 		sign configurations.archives
+	}
+
+	checkstyle {
+		configFile = new File(rootConfigDir, 'checkstyle.xml')
+		toolVersion = '7.7'
 	}
 }
 

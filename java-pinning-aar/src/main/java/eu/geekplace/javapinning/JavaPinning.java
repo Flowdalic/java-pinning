@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014-2015 Florian Schmaus
+ * Copyright 2014-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,11 +43,13 @@ public class JavaPinning {
 		return INSTANCE.tmForPin(pinString);
 	}
 
-	public static X509TrustManager trustManagerForPins(Collection<Pin> pins){
+	public static X509TrustManager trustManagerForPins(Collection<Pin> pins) {
 		return INSTANCE.tmForPins(pins);
 	}
 
 	/**
+	 * Do not use.
+	 *
 	 * @deprecated Please use the correctly named: {@link #trustManagerForPins(Collection)}
 	 */
 	@Deprecated
@@ -80,7 +81,7 @@ public class JavaPinning {
 
 	protected final X509TrustManager tmForPins(String... pinStrings) {
 		List<Pin> pins = new ArrayList<>(pinStrings.length);
-		for(String pin: pinStrings){
+		for (String pin : pinStrings) {
 			pins.add(Pin.fromString(pin));
 		}
 		return tmForPins(pins);

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2015 Florian Schmaus
+ * Copyright 2015-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ package eu.geekplace.javapinning.pin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Test;
-
 import java.security.cert.CertificateEncodingException;
 
 import eu.geekplace.javapinning.TestUtilities;
 import eu.geekplace.javapinning.util.HexUtilities;
 import eu.geekplace.javapinning.util.X509CertificateUtilities;
+
+import org.junit.Test;
 
 public class PinTest {
 
@@ -48,7 +48,7 @@ public class PinTest {
 		int start = 0;
 		for (int i : subsequences) {
 			sb.append(PIN_STRING_W_COLON.subSequence(start, i));
-			sb.append(" ");
+			sb.append(' ');
 			start = i;
 		}
 		sb.append(PIN_STRING_W_COLON.subSequence(start, PIN_STRING_W_COLON.length()));
@@ -72,13 +72,13 @@ public class PinTest {
 	}
 
 	@Test
-	public void fromString_plainCertHexString_returnsCertPlainPin(){
+	public void fromString_plainCertHexString_returnsCertPlainPin() {
 		CertPlainPin plainPin = (CertPlainPin) Pin.fromString("CERTPLAIN:" + TestUtilities.PLAIN_CERTIFICATE_1);
 		assertNotNull(plainPin.getX509Certificate());
 	}
 
 	@Test
-	public void fromString_plainPinHexString_returnsPlainPin(){
+	public void fromString_plainPinHexString_returnsPlainPin() {
 		PlainPin plainPin = (PlainPin) Pin.fromString("PLAIN:" + TestUtilities.PLAIN_PUBLIC_KEY_1);
 		assertNotNull(plainPin.getPublicKey());
 	}

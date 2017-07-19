@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014-2015 Florian Schmaus
+ * Copyright 2014-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package eu.geekplace.javapinning.pin;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
@@ -44,7 +43,7 @@ public abstract class Pin {
 
 	protected final byte[] pinBytes;
 
-	protected Pin(byte[] pinBytes){
+	protected Pin(byte[] pinBytes) {
 		this.pinBytes = pinBytes;
 	}
 

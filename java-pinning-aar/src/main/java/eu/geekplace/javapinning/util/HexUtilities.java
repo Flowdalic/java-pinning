@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014-2015 Florian Schmaus
+ * Copyright 2014-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,17 +29,17 @@ public final class HexUtilities {
      * @return a String in HEX format.
      */
     public static String encodeToHex(byte[] bytes, boolean uppercase, boolean semicolons) {
-        final char[] lookupTable = new char[]{
+        final char[] lookupTable = new char[] {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'a', 'b', 'c', 'd', 'e', 'f'};
 
-        final int multiplier = (semicolons?3:2);
-        final char[] hexChars = new char[bytes.length * multiplier - (semicolons?1:0)];
-        for (int i = 0; i < bytes.length; i++ ) {
+        final int multiplier = semicolons ? 3 : 2;
+        final char[] hexChars = new char[bytes.length * multiplier - (semicolons ? 1 : 0)];
+        for (int i = 0; i < bytes.length; i++) {
             final int v = bytes[i] & 0xFF;
             hexChars[i * multiplier] = lookupTable[v >>> 4];
             hexChars[i * multiplier + 1] = lookupTable[v & 0x0F];
-            if(i < bytes.length-1) {
+            if (i < bytes.length - 1) {
                 hexChars[i * multiplier + 2] = ':';
             }
         }
@@ -51,7 +51,7 @@ public final class HexUtilities {
      * @param bytes the bytes to convert.
      * @return a String in HEX format.
      */
-    public static String encodeToHex(byte[] bytes){
+    public static String encodeToHex(byte[] bytes) {
         return encodeToHex(bytes, false, false);
     }
 
@@ -62,7 +62,7 @@ public final class HexUtilities {
      * @return a byte array which represents the given HEX string.
      * @throws IllegalArgumentException if the given HEX string is not valid.
      */
-    public static byte[] decodeFromHex(String hexString) throws IllegalArgumentException{
+    public static byte[] decodeFromHex(String hexString) throws IllegalArgumentException {
         // This code is actually a slightly modified copy of the code in the Pin(String) constructor.
         hexString = hexString.toLowerCase();
         // Replace all ':' and whitespace characters with the empty string, i.e. remove them from pinHexString
@@ -70,7 +70,7 @@ public final class HexUtilities {
 
         final char[] pinHexChars = hexString.toCharArray();
         final int length = pinHexChars.length;
-        if(length % 2 != 0){
+        if (length % 2 != 0) {
             throw new IllegalArgumentException("HEX String length, with whitespace and semicolons removed, must be divisible by 2 as two characters are needed to decode a single byte!");
         }
 

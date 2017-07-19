@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014-2015 Florian Schmaus
+ * Copyright 2014-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
  */
 package eu.geekplace.javapinning.util;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
 import eu.geekplace.javapinning.TestUtilities;
 
-import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 public class X509CertificateUtilitiesTest {
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2015 Florian Schmaus
+ * Copyright 2015-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
  */
 package eu.geekplace.javapinning;
 
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -26,8 +27,7 @@ import javax.net.ssl.X509TrustManager;
 import eu.geekplace.javapinning.util.HexUtilities;
 import eu.geekplace.javapinning.util.X509CertificateUtilities;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 
 public class PinningTrustManagerTest {
 

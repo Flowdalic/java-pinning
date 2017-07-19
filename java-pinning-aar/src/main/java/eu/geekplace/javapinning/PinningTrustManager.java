@@ -25,7 +25,6 @@ import javax.net.ssl.X509TrustManager;
 
 import eu.geekplace.javapinning.pin.Pin;
 import eu.geekplace.javapinning.util.HexUtilities;
-import eu.geekplace.javapinning.util.JavaPinningUtil;
 
 public class PinningTrustManager implements X509TrustManager {
 

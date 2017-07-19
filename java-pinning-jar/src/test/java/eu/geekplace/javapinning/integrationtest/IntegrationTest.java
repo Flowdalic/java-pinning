@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014 Florian Schmaus
+ * Copyright 2014-2017 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
  */
 package eu.geekplace.javapinning.integrationtest;
 
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -29,6 +27,8 @@ import javax.net.ssl.SSLSocket;
 
 import eu.geekplace.javapinning.JavaPinning;
 
+import org.junit.Test;
+
 public class IntegrationTest {
 
 	@Test
@@ -39,7 +39,9 @@ public class IntegrationTest {
 		SSLSocket sslSocket = (SSLSocket) sc.getSocketFactory().createSocket(socket, "github.com", 443, true);
 		sslSocket.startHandshake();
 		String name = sslSocket.getSession().getPeerPrincipal().getName();
+		// CHECKSTYLE:OFF
 		System.out.println(name);
+		// CHECKSTYLE:ON
 		OutputStream os = sslSocket.getOutputStream();
 		os.write("GET /".getBytes());
 		os.flush();
