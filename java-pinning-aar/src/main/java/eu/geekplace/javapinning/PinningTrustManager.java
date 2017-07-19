@@ -53,7 +53,7 @@ public class PinningTrustManager implements X509TrustManager {
 		// no use and most other software UIs show the "public key" without
 		// colons (and using lowercase letters).
 		final String pinHexString = HexUtilities.encodeToHex(leafCertificate.getEncoded());
-		throw new CertificateException("Certificate not pinned. Use 'CERTPLAIN:" + pinHexString
+		throw new CertificateNotPinnedException("Certificate not pinned. Use 'CERTPLAIN:" + pinHexString
 				+ "' to pin this certificate. But only pin the certificate if you are sure this is the correct certificate!");
 	}
 

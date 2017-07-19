@@ -21,8 +21,11 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import java.security.cert.CertificateEncodingException;
+
 import eu.geekplace.javapinning.TestUtilities;
 import eu.geekplace.javapinning.util.HexUtilities;
+import eu.geekplace.javapinning.util.X509CertificateUtilities;
 
 public class PinTest {
 
@@ -78,5 +81,17 @@ public class PinTest {
 	public void fromString_plainPinHexString_returnsPlainPin(){
 		PlainPin plainPin = (PlainPin) Pin.fromString("PLAIN:" + TestUtilities.PLAIN_PUBLIC_KEY_1);
 		assertNotNull(plainPin.getPublicKey());
+	}
+
+	@Test
+	public void fromCertificate_notNull_returnsCertPLainPin() throws CertificateEncodingException {
+		CertPlainPin certPlainPin = CertPlainPin.fromCertificate(X509CertificateUtilities.decodeX509Certificate(TestUtilities.PLAIN_CERTIFICATE_1));
+		assertNotNull(certPlainPin);
+	}
+
+	@Test
+	public void fromPublicKey_notNull_returnsPLainPin() throws CertificateEncodingException {
+		PlainPin plainPin = PlainPin.fromPublicKey(X509CertificateUtilities.decodeX509PublicKey(TestUtilities.PLAIN_PUBLIC_KEY_1));
+		assertNotNull(plainPin);
 	}
 }
