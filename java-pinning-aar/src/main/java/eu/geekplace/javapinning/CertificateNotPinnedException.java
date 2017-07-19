@@ -24,6 +24,11 @@ import java.security.cert.CertificateException;
  */
 public class CertificateNotPinnedException extends CertificateException {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public CertificateNotPinnedException(String message) {
 		super(message);
 	}
