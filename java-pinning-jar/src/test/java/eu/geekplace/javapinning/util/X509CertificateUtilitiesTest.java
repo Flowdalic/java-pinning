@@ -24,23 +24,25 @@ import org.junit.Test;
 
 public class X509CertificateUtilitiesTest {
 
-    @Test
-    public void decodeX509Certificate_validEncodedCertificate_returnsX509Certificate() {
-        assertNotNull(X509CertificateUtilities.decodeX509Certificate(TestUtilities.PLAIN_CERTIFICATE_1));
-    }
+	@Test
+	public void decodeX509Certificate_validEncodedCertificate_returnsX509Certificate() {
+		assertNotNull(X509CertificateUtilities.decodeX509Certificate(TestUtilities.PLAIN_CERTIFICATE_1));
+	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void decodeX509Certificate_invalidEncodedCertificate_throwsIllegalArgumentException() {
-        assertNotNull(X509CertificateUtilities.decodeX509Certificate("03a391615ce416307380e27601a0767e83c3264dba6b31074b1ac1480643d4d2"));
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void decodeX509Certificate_invalidEncodedCertificate_throwsIllegalArgumentException() {
+		assertNotNull(X509CertificateUtilities
+				.decodeX509Certificate("03a391615ce416307380e27601a0767e83c3264dba6b31074b1ac1480643d4d2"));
+	}
 
-    @Test
-    public void decodeX509PublicKey_validEncodedPublicKey_returnsX509Certificate() {
-        assertNotNull(X509CertificateUtilities.decodeX509PublicKey(TestUtilities.PLAIN_PUBLIC_KEY_1));
-    }
+	@Test
+	public void decodeX509PublicKey_validEncodedPublicKey_returnsX509Certificate() {
+		assertNotNull(X509CertificateUtilities.decodeX509PublicKey(TestUtilities.PLAIN_PUBLIC_KEY_1));
+	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void decodeX509PublicKey_invalidEncodedPublicKey_throwsIllegalArgumentException() {
-        assertNotNull(X509CertificateUtilities.decodeX509PublicKey("03a391615ce416307380e27601a0767e83c3264dba6b31074b1ac1480643d4d2"));
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void decodeX509PublicKey_invalidEncodedPublicKey_throwsIllegalArgumentException() {
+		assertNotNull(X509CertificateUtilities
+				.decodeX509PublicKey("03a391615ce416307380e27601a0767e83c3264dba6b31074b1ac1480643d4d2"));
+	}
 }

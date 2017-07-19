@@ -87,12 +87,10 @@
 			<property name="message" value="Usage of println"/>
 			<property name="ignoreComments" value="true"/>
 		</module>
-		<!-- TODO Enable this check, once we use tabs everywhere
 		<module name="RegexpSinglelineJava">
-			<property name="format" value="^\s+"/>
+			<property name="format" value="^  +"/>
 			<property name="message" value="Indent must not use space characters. Use tab instead."/>
 		</module>
-			-->
 		<module name="JavadocMethod">
 			<!-- TODO stricten those checks -->
 			<property name="scope" value="public"/>

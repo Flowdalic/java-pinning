@@ -32,29 +32,29 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public final class X509CertificateUtilities {
 
-    public static X509Certificate decodeX509Certificate(String hexString) {
-        return decodeX509Certificate(HexUtilities.decodeFromHex(hexString));
-    }
+	public static X509Certificate decodeX509Certificate(String hexString) {
+		return decodeX509Certificate(HexUtilities.decodeFromHex(hexString));
+	}
 
-    public static X509Certificate decodeX509Certificate(byte[] encodedCertificate) {
-        try {
-            final CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-            return (X509Certificate) certFactory.generateCertificate(new ByteArrayInputStream(encodedCertificate));
-        } catch (CertificateException e) {
-            throw new IllegalArgumentException("Byte array cannot be decoded", e);
-        }
-    }
+	public static X509Certificate decodeX509Certificate(byte[] encodedCertificate) {
+		try {
+			final CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+			return (X509Certificate) certFactory.generateCertificate(new ByteArrayInputStream(encodedCertificate));
+		} catch (CertificateException e) {
+			throw new IllegalArgumentException("Byte array cannot be decoded", e);
+		}
+	}
 
-    public static PublicKey decodeX509PublicKey(String hexString) {
-        return decodeX509PublicKey(HexUtilities.decodeFromHex(hexString));
-    }
+	public static PublicKey decodeX509PublicKey(String hexString) {
+		return decodeX509PublicKey(HexUtilities.decodeFromHex(hexString));
+	}
 
-    public static PublicKey decodeX509PublicKey(byte[] encodedPublicKeyBytes) {
-        try {
-            final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            return keyFactory.generatePublic(new X509EncodedKeySpec(encodedPublicKeyBytes));
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new IllegalArgumentException("Byte array cannot be decoded", e);
-        }
-    }
+	public static PublicKey decodeX509PublicKey(byte[] encodedPublicKeyBytes) {
+		try {
+			final KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			return keyFactory.generatePublic(new X509EncodedKeySpec(encodedPublicKeyBytes));
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			throw new IllegalArgumentException("Byte array cannot be decoded", e);
+		}
+	}
 }
