@@ -1,0 +1,27 @@
+language: android
+
+android:
+  components:
+    - tools
+    - android-15
+    - build-tools-25.0.3
+
+dist: precise
+
+jdk:
+  - oraclejdk8
+
+sudo: false
+
+cache:
+  directories:
+  - $HOME/.m2
+
+before_install:
+  - export GRADLE_VERSION=3.5
+  - wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-all.zip
+  - unzip -q gradle-${GRADLE_VERSION}-all.zip
+  - export PATH="$(pwd)/gradle-${GRADLE_VERSION}/bin:$PATH"
+
+install: gradle assemble --stacktrace
+script: gradle check --stacktrace
