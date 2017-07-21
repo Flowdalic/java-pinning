@@ -16,6 +16,8 @@
  */
 package eu.geekplace.javapinning.util;
 
+import java.util.Locale;
+
 /**
  * This class contains a few utility methods to encode and decode to HEX from raw bytes.
  */
@@ -43,7 +45,7 @@ public final class HexUtilities {
 				hexChars[i * multiplier + 2] = ':';
 			}
 		}
-		return uppercase ? new String(hexChars).toUpperCase() : new String(hexChars);
+		return uppercase ? new String(hexChars).toUpperCase(Locale.US) : new String(hexChars);
 	}
 
 	/**
@@ -66,7 +68,7 @@ public final class HexUtilities {
 	 */
 	public static byte[] decodeFromHex(String hexString) throws IllegalArgumentException {
 		// This code is actually a slightly modified copy of the code in the Pin(String) constructor.
-		hexString = hexString.toLowerCase();
+		hexString = hexString.toLowerCase(Locale.US);
 		// Replace all ':' and whitespace characters with the empty string, i.e. remove them from pinHexString
 		hexString = hexString.replaceAll("[:\\s]", "");
 
