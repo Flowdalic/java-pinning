@@ -1,10 +1,10 @@
 allprojects {
 	ext {
-		shortVersion = '1.1.0'
+		shortVersion = '1.1.1'
 		// increase versionCode with every release
 		// versionCode format:
 		// <two-digits-major><two-digits-minor><two-digits-patch><two-digits-identifier>
-		versionCode = 01010002
-		isSnapshot = false
+		versionCode = 01010100
+		isSnapshot = true
 	}
 }
