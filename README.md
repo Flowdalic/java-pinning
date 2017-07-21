@@ -119,7 +119,7 @@ Difference between Public Key Pins and Certificate Pins
 -------------------------------------------------------
 
 Both provide the same security guarantee.
-If the private key is compromised, but fail to provide a security guarantee any more.
+If the private key is compromised, both can no longer provide a security guarantee.
 Using Public Key pinning provides (theoretically) the advantage that the certificate could be replaced with a new one using the same private/public key pair, thus requiring no changes to the used Pins.
 
 Alternatives
