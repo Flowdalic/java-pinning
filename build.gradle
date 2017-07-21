@@ -135,7 +135,7 @@ subprojects {
 				pom.project {
 					name 'Java Pinning'
 					description project.oneLineDesc
-					url 'http://androidpinning.geekplace.eu'
+					url 'http://javapinning.geekplace.eu'
 
 					scm {
 						url 'https://github.com/flowdalic/android-pinning'

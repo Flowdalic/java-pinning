@@ -17,7 +17,7 @@ See also the "Alternatives" section in this README.
 Changelog
 ---------
 
-### Upcoming Version
+### 1.1.0
 
 - Added support for the Java 7 `X509ExtendedTrustManager` if your project uses Java 7 please use `Java7Pinning` instead of `JavaPinning`.
 - Two new factory methods `JavaPinning.trustManagerForPins(String...)` and `JavaPinning.forPins(String...)`.
@@ -102,7 +102,7 @@ How to add this as dependency
 ### Gradle
 
 ```groovy
-compile('eu.geekplace.javapinning:java-pinning-jar:1.0.1')
+compile('eu.geekplace.javapinning:java-pinning-jar:1.1.0')
 ```
 
 ### Maven
@@ -111,7 +111,7 @@ compile('eu.geekplace.javapinning:java-pinning-jar:1.0.1')
 <dependency>
 	<groupId>eu.geekplace.javapinning</groupId>
 	<artifactId>java-pinning-jar</artifactId>
-	<version>1.0.1</version>
+	<version>1.1.0</version>
 </dependency>
 ```
 
