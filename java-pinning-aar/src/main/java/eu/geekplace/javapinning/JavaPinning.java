@@ -54,7 +54,7 @@ public class JavaPinning {
 	 */
 	@Deprecated
 	public static X509TrustManager trustManagerforPins(Collection<Pin> pins) {
-		return trustManagerforPins(pins);
+		return trustManagerForPins(pins);
 	}
 
 	public static SSLContext forPins(String... pinStrings) throws KeyManagementException,
