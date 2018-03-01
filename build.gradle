@@ -93,6 +93,7 @@ configure(javaProjects) {
 }
 
 allprojects {
+	apply plugin: 'idea'
 	group = 'eu.geekplace.javapinning'
 	version = shortVersion
 	if (isSnapshot) {
