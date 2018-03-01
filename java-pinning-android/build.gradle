@@ -13,6 +13,9 @@ android {
         sourceCompatibility = javaCompatibility
 		targetCompatibility project.sourceCompatibility
     }
+	lintOptions {
+		abortOnError true
+	}
 }
 
 dependencies {
