@@ -102,7 +102,7 @@ How to add this as dependency
 ### Gradle
 
 ```groovy
-compile('eu.geekplace.javapinning:java-pinning-jar:1.1.0')
+compile('eu.geekplace.javapinning:java-pinning-core:1.1.1')
 ```
 
 ### Maven
@@ -110,8 +110,8 @@ compile('eu.geekplace.javapinning:java-pinning-jar:1.1.0')
 ```xml
 <dependency>
 	<groupId>eu.geekplace.javapinning</groupId>
-	<artifactId>java-pinning-jar</artifactId>
-	<version>1.1.0</version>
+	<artifactId>java-pinning-core</artifactId>
+	<version>1.1.1</version>
 </dependency>
 ```
 

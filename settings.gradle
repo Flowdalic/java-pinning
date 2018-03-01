@@ -1,4 +1,4 @@
 include \
-    'java-pinning-aar' \
-  , 'java-pinning-jar' \
+    'java-pinning-core' \
+  , 'java-pinning-android' \
   , 'java-pinning-java7'

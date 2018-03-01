@@ -2,10 +2,11 @@ buildscript {
     repositories {
 		mavenCentral()
 		jcenter()
+		google()
     }
 
     dependencies {
-		classpath 'com.android.tools.build:gradle:2.3.3'
+		classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
@@ -25,7 +26,7 @@ ext {
 	builtDate = (new java.text.SimpleDateFormat("yyyy-MM-dd")).format(new Date())
 	oneLineDesc = 'A Java library for TLS pinning'
 	androidProjects = [
-		':java-pinning-aar'
+		':java-pinning-android'
 	].collect{ project(it) }
 	javaProjects = subprojects - androidProjects
 	javaCompatibility = JavaVersion.VERSION_1_7
@@ -38,7 +39,7 @@ configure(javaProjects) {
 	apply plugin: 'osgi'
 	// We need to apply the 'maven' plugin here too, as otherwise the
 	// dependencies of java-pinning-java7 won't be set correctly, e.g
-	// the dependency on java-pinning-jar won't be set.
+	// the dependency on java-pinning won't be set.
 	apply plugin: 'maven'
 
 	sourceCompatibility = javaCompatibility

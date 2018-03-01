@@ -1,4 +1,4 @@
 dependencies {
-	compile project(':java-pinning-jar')
-	testCompile project(path: ':java-pinning-jar', configuration: 'testRuntime')
+	compile project(':java-pinning-core')
+	testCompile project(path: ':java-pinning-core', configuration: 'testRuntime')
 }
