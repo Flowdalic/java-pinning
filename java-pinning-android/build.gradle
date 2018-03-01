@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-	implementation project(':java-pinning-core')
+	// implementation project(':java-pinning-core')
 }
 
 uploadArchives {
