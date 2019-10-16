@@ -46,7 +46,7 @@ public class PinningTrustManager implements X509TrustManager {
 
 		final X509Certificate leafCertificate = chain[0];
 
-		for (X509Certificate cert: chain)
+		for (X509Certificate cert : chain)
 			if (isPinned(cert)) return;
 
 		// Throw a CertificateException with a meaningful message. Note that we
