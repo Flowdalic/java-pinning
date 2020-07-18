@@ -1,4 +1,4 @@
 dependencies {
-	implementation project(':java-pinning-core')
+	api project(':java-pinning-core')
 	testImplementation project(path: ':java-pinning-core', configuration: 'testRuntime')
 }
