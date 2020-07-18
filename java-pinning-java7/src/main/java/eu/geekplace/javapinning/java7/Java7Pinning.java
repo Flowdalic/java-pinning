@@ -60,16 +60,6 @@ public final class Java7Pinning extends JavaPinning {
 		return INSTANCE.tmForPins(pins);
 	}
 
-	/**
-	 * Deprecated.
-	 *
-	 * @deprecated Please use the correctly named: {@link #trustManagerForPins(Collection)}
-	 */
-	@Deprecated
-	public static X509TrustManager trustManagerforPins(Collection<Pin> pins) {
-		return INSTANCE.tmForPins(pins);
-	}
-
 	public static SSLContext forPins(String... pinString) throws KeyManagementException,
 			NoSuchAlgorithmException {
 		return INSTANCE.ctxForPins(pinString);
