@@ -43,10 +43,12 @@ public class PinningTrustManager implements X509TrustManager {
 	@Override
 	public void checkServerTrusted(X509Certificate[] chain, String authType)
 			throws CertificateException {
+
 		final X509Certificate leafCertificate = chain[0];
-		if (isPinned(leafCertificate)) {
-			return;
-		}
+
+		for (X509Certificate cert : chain)
+			if (isPinned(cert)) return;
+
 		// Throw a CertificateException with a meaningful message. Note that we
 		// use CERTPLAIN, which tends to be long, so colons as separator are of
 		// no use and most other software UIs show the "public key" without

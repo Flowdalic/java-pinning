@@ -31,10 +31,21 @@ import org.junit.Test;
 
 public class IntegrationTest {
 
-	@Test
-	public  void main() throws NoSuchAlgorithmException, KeyManagementException, IOException {
-		SSLContext sc = JavaPinning.forPin("SHA256:a4bd7ea9bf474cc459266b82fdb07f648f5ddf4d8162baea895b91c96f831ab5");
+	private static final String PIN_GITHUB_DIGICERT = "SHA256:451335746aa70c5b022570531e4cb5eaf8b5a1b3a50a01459ffc8e848ff2fa1a";
+	private static final String PIN_GITHUB_LEAF = "SHA256:a39a1ae45e0b6d911f799d245c3826694d8adec20f62d6d0a53dc440b259aae3";
 
+	@Test
+	public void testGithubDigiCert()  throws NoSuchAlgorithmException, KeyManagementException, IOException {
+		connect(JavaPinning.forPin(PIN_GITHUB_DIGICERT));
+	}
+
+	@Test
+	public void testGithubLeaf()  throws NoSuchAlgorithmException, KeyManagementException, IOException {
+		connect(JavaPinning.forPin(PIN_GITHUB_LEAF));
+	}
+
+
+	private void connect(SSLContext sc) throws NoSuchAlgorithmException, KeyManagementException, IOException {
 		Socket socket = new Socket("github.com", 443);
 		SSLSocket sslSocket = (SSLSocket) sc.getSocketFactory().createSocket(socket, "github.com", 443, true);
 		sslSocket.startHandshake();
