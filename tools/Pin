@@ -1,0 +1,62 @@
+#!/usr/bin/env -S java --source 8
+// SPDX-License-Identifier: Apache-2.0
+
+import javax.net.ssl.HttpsURLConnection;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateParsingException;
+import java.security.cert.X509Certificate;
+import java.util.stream.Collectors;
+
+public class Pin {
+
+    public static void main(String[] args) throws IOException, CertificateParsingException, NoSuchAlgorithmException {
+
+        if (args.length < 1) {
+            System.out.println("Usage: ./Pin <domain:[port]>");
+            System.exit(1);
+        }
+
+        HttpsURLConnection con = (HttpsURLConnection) new URL("https://" + args[0]).openConnection();
+        con.connect();
+        final Certificate[] certificates = con.getServerCertificates();
+        con.disconnect();
+
+        int count = 0;
+        for (Certificate cert : certificates) {
+
+            System.out.println("Certificate Nr. " + ++count);
+
+            if (!(cert instanceof X509Certificate)) continue;
+            X509Certificate xc = (X509Certificate) cert;
+
+            System.out.println("Subject: " + xc.getSubjectDN().getName());
+            System.out.println("Valid from " + xc.getNotBefore() + " to " + xc.getNotAfter());
+
+            if (xc.getSubjectAlternativeNames() != null) {
+                System.out.println("Alternate DNS: " + xc.getSubjectAlternativeNames()
+                        .stream()
+                        .map(l -> l.get(1))
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", ")));
+            }
+
+            String padded = String.format("%64s",
+                    new BigInteger(1, MessageDigest
+                            .getInstance("SHA-256")
+                            .digest(cert.getPublicKey().getEncoded()))
+                            .toString(16))
+                    .replace(" ", "0")
+                    .toLowerCase();
+
+            System.out.println("Pin string: SHA256:" + padded + System.lineSeparator());
+
+        }
+
+    }
+
+}
