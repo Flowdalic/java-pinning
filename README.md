@@ -48,8 +48,8 @@ Pin Value: PLAIN:30820222300d06092a864886f70d01010105000382020f003082020a0282020
 
 
 ```java
-SSLContext sc = JavaPinning
-  .forPin("SHA256:e3b1812d945da1a2a2c5fa28029d2fe34c7c4142fb098f5cfedff1ff20e98781");
+X509TrustManager tm = Java7Pinning
+  .trustManagerForPin("SHA256:e3b1812d945da1a2a2c5fa28029d2fe34c7c4142fb098f5cfedff1ff20e98781");
 ```
 
 Now you can setup this context.
@@ -57,20 +57,17 @@ Now you can setup this context.
 Examples
 --------
 
-# [Smack](http://www.igniterealtime.org/projects/smack/) 4.0
-
-```java
-ConnectionConfiguration conf = …
-conf.setCustonSSLContext(sc);
-```
-
-# [Smack](http://www.igniterealtime.org/projects/smack/) 4.1
+# [Smack](http://www.igniterealtime.org/projects/smack/)
 
 
 ```java
+X509TrustManager tm = Java7Pinning
+  .trustManagerForPin("SHA256:e3b1812d945da1a2a2c5fa28029d2fe34c7c4142fb098f5cfedff1ff20e98781");
 XMPPTCPConnectionConfiguration conf = XMPPTCPConnectionConfiguration.builder()
-  .setUsernameAndPassword("user", "pass").setService("example.org")
-  .setCustomSSLContext(sc).build();
+  .setUsernameAndPassword("user", "pass")
+  .setService("example.org")
+  .setCustomX509TrustManager(tm)
+  .build()
 ```
 
 How to add this as dependency
@@ -79,7 +76,7 @@ How to add this as dependency
 ### Gradle
 
 ```groovy
-compile('eu.geekplace.javapinning:java-pinning-core:1.1.1')
+compile('eu.geekplace.javapinning:java-pinning-core:1.2.0')
 ```
 
 ### Maven
@@ -88,7 +85,7 @@ compile('eu.geekplace.javapinning:java-pinning-core:1.1.1')
 <dependency>
 	<groupId>eu.geekplace.javapinning</groupId>
 	<artifactId>java-pinning-core</artifactId>
-	<version>1.1.1</version>
+	<version>1.2.0</version>
 </dependency>
 ```
 
