@@ -34,6 +34,7 @@ public abstract class PublicKeyPin extends Pin {
 		return pinsCertificate(pubkey);
 	}
 
+	@Override
 	protected abstract boolean pinsCertificate(byte[] pubkey);
 
 }

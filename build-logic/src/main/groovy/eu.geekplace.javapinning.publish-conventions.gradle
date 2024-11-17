@@ -1,0 +1,73 @@
+plugins {
+	id 'maven-publish'
+	id 'signing'
+}
+
+ext {
+	sonatypeCredentialsAvailable = project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+	isContinuousIntegrationEnvironment = Boolean.parseBoolean(System.getenv('CI'))
+	signingRequired = !(isSnapshot || isContinuousIntegrationEnvironment)
+	sonatypeSnapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+	sonatypeStagingUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			pom {
+				name = 'Java Pinning'
+				url = 'http://javapinning.geekplace.eu'
+				afterEvaluate {
+					description = project.description
+				}
+
+				scm {
+					url = 'https://github.com/flowdalic/android-pinning'
+					connection = 'scm:git@github.com:flowdalic/android-pinning.git'
+					developerConnection = 'scm:git@github.com:flowdalic/android-pinning.git'
+				}
+
+				licenses {
+					license {
+						name = 'The Apache Software License, Version 2.0'
+						url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						distribution = 'repo'
+					}
+				}
+
+				developers {
+					developer {
+						id = 'flow'
+						name = 'Florian Schmaus'
+						email = 'flo@geekplace.eu'
+					}
+				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			url isSnapshot ? sonatypeSnapshotUrl : sonatypeStagingUrl
+			if (sonatypeCredentialsAvailable) {
+				credentials {
+					username = sonatypeUsername
+					password = sonatypePassword
+				}
+			}
+		}
+	}
+}
+
+// Workaround for gpg signatory not supporting the 'required' option
+// See https://github.com/gradle/gradle/issues/5064#issuecomment-381924984
+// Note what we use 'signing.gnupg.keyName' instead of 'signing.keyId'.
+tasks.withType(Sign) {
+	onlyIf {
+		project.hasProperty('signing.gnupg.keyName')
+	}
+}
+signing {
+	required { signingRequired }
+	useGpgCmd()
+	sign publishing.publications.mavenJava
+}

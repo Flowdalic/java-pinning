@@ -1,3 +1,10 @@
+plugins {
+    id 'eu.geekplace.javapinning.java-conventions'
+}
+
+description = """\
+Java Pinning's Java API"""
+
 dependencies {
 	api project(':java-pinning-core')
 	testImplementation project(path: ':java-pinning-core', configuration: 'testRuntime')

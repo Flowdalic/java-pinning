@@ -1,34 +1,46 @@
-apply plugin: 'com.android.library'
+plugins {
+	id 'eu.geekplace.javapinning.common-conventions'
+	id 'eu.geekplace.javapinning.publish-conventions'
+	id 'com.android.library'
+}
 
 android {
-    compileSdkVersion 15
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 30
 
     defaultConfig {
-		versionCode project.versionCode
 		versionName version
-		minSdkVersion 1
+		// increase versionCode with every release
+		// versionCode format:
+		// <two-digits-major><two-digits-minor><two-digits-patch><two-digits-identifier>
+		versionCode 1030100
+		minSdkVersion minAndroidSdk
+		namespace 'eu.geekplace.javapinning.android'
     }
     compileOptions {
-        sourceCompatibility = javaCompatibility
+        sourceCompatibility = javaVersion
 		targetCompatibility project.sourceCompatibility
     }
 	lintOptions {
 		abortOnError true
 	}
+
+	publishing {
+		singleVariant("release") {
+			withSourcesJar()
+			withJavadocJar()
+		}
+	}
 }
 
 dependencies {
-	// implementation project(':java-pinning-core')
+	api project(':java-pinning-core')
 }
 
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			pom {
-				project {
-					packaging 'aar'
-				}
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			afterEvaluate {
+				from components.release
 			}
 		}
 	}

@@ -1,0 +1,11 @@
+plugins {
+	id 'ru.vyarus.animalsniffer'
+	id 'eu.geekplace.javapinning.common-conventions'
+}
+
+dependencies {
+	signature "net.sf.androidscents.signature:android-api-level-${minAndroidSdk}:4.0.3_r5@signature"
+}
+animalsniffer {
+	sourceSets = [sourceSets.main]
+}

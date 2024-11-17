@@ -1,209 +1,59 @@
-buildscript {
-    repositories {
-		mavenCentral()
-		jcenter()
-		google()
-    }
-
-    dependencies {
-		classpath 'com.android.tools.build:gradle:3.0.1'
-    }
+plugins {
+    id 'eu.geekplace.javapinning.javadoc-conventions'
 }
 
-apply from: 'version.gradle'
+// TODO:
+// apply from: 'version.gradle'
 
 ext {
-	gitCommit = getGitCommit()
-	buildDate = getDatestamp()
-	sonatypeCredentialsAvailable = project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
-	isReleaseVersion = !isSnapshot
-	signingRequired = isReleaseVersion
-	sonatypeSnapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
-	sonatypeStagingUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-	// Returns only the date in yyyy-MM-dd format, as otherwise, with
-	// hh:mm:ss information, the manifest files would change with every
-	// build, causing unnecessary rebuilds.
-	builtDate = (new java.text.SimpleDateFormat("yyyy-MM-dd")).format(new Date())
-	oneLineDesc = 'A Java library for TLS pinning'
-	androidProjects = [
-		':java-pinning-android'
-	].collect{ project(it) }
-	javaProjects = subprojects - androidProjects
-	javaCompatibility = JavaVersion.VERSION_1_7
-	rootConfigDir = new File(rootDir, 'config')
+    javadocAllDir = new File(buildDir, 'javadoc')
+	noJavadocAllProjects = [
+		':java-pinning-android',
+	].collect { project(it) }
+    javadocAllProjects = subprojects - noJavadocAllProjects
 }
 
-configure(javaProjects) {
-	apply plugin: 'java'
-	apply plugin: 'eclipse'
-	apply plugin: 'osgi'
-	// We need to apply the 'maven' plugin here too, as otherwise the
-	// dependencies of java-pinning-java7 won't be set correctly, e.g
-	// the dependency on java-pinning won't be set.
-	apply plugin: 'maven'
 
-	sourceCompatibility = javaCompatibility
-	targetCompatibility = sourceCompatibility
-
-	eclipse {
-		classpath {
-			downloadJavadoc = true
+evaluationDependsOnChildren()
+task javadocAll(type: Javadoc) {
+	source javadocAllProjects.collect {project ->
+		project.sourceSets.main.allJava.findAll {
+			// Filter out symbolic links to avoid
+			// "warning: a package-info.java file has already been seen for package"
+			// javadoc warnings.
+			!java.nio.file.Files.isSymbolicLink(it.toPath())
 		}
 	}
-
-	task sourcesJar(type: Jar, dependsOn: classes) {
-		classifier = 'sources'
-		from sourceSets.main.allSource
+	destinationDir = javadocAllDir
+	// Might need a classpath
+	classpath = files(javadocAllProjects.collect {project ->
+		project.sourceSets.main.compileClasspath})
+	classpath += files(androidBootClasspath)
+	options {
+		linkSource = true
+		use = true
+		links = [
+		"https://docs.oracle.com/en/java/javase/${javaMajor}/docs/api/",
+		] as String[]
+		overview = "$projectDir/resources/javadoc-overview.html"
 	}
 
-	task javadocJar(type: Jar, dependsOn: javadoc) {
-		classifier = 'javadoc'
-		from javadoc.destinationDir
-	}
-
-	artifacts {
-		archives sourcesJar
-		archives javadocJar
-	}
-
-	uploadArchives {
-		repositories {
-			mavenDeployer {
-				pom {
-					project {
-						packaging 'jar'
-					}
+	// Finally copy the javadoc doc-files from the subprojects, which
+	// are potentially generated, to the javadocAll directory. Note
+	// that we use a copy *method* and not a *task* because the inputs
+	// of copy tasks is determined within the configuration phase. And
+	// since some of the inputs are generated, they will not get
+	// picked up if we used a copy method. See also
+	// https://stackoverflow.com/a/40518516/194894
+	doLast {
+		copy {
+			javadocAllProjects.each {
+				from ("${it.projectDir}/src/javadoc") {
+					include '**/doc-files/*.*'
 				}
 			}
+
+			into javadocAllDir
 		}
 	}
-
-	jar {
-		manifest {
-			attributes(
-			'Implementation-Version': version,
-			'Implementation-GitRevision': project.gitCommit,
-			'Built-Date': project.buildDate,
-			'Built-JDK': System.getProperty('java.version'),
-			'Built-Gradle': gradle.gradleVersion,
-			'Built-By': System.getProperty('user.name')
-			)
-		}
-	}
-}
-
-allprojects {
-	apply plugin: 'idea'
-	group = 'eu.geekplace.javapinning'
-	version = shortVersion
-	if (isSnapshot) {
-		version += '-SNAPSHOT'
-	}
-
-	if (JavaVersion.current().isJava8Compatible()) {
-		tasks.withType(Javadoc) {
-			options.addStringOption('Xdoclint:none', '-quiet')
-		}
-	}
-
-}
-
-subprojects {
-	apply plugin: 'maven'
-	apply plugin: 'signing'
-	apply plugin: 'checkstyle'
-
-	repositories {
-		mavenCentral()
-	}
-
-	uploadArchives {
-		repositories {
-			mavenDeployer {
-				if (signingRequired) {
-					beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-				}
-				repository(url: project.sonatypeStagingUrl) {
-					if (sonatypeCredentialsAvailable) {
-						authentication(userName: sonatypeUsername, password: sonatypePassword)
-					}
-				}
-				snapshotRepository(url: project.sonatypeSnapshotUrl) {
-					if (sonatypeCredentialsAvailable) {
-						authentication(userName: sonatypeUsername, password: sonatypePassword)
-					}
-				}
-
-				pom.project {
-					name 'Java Pinning'
-					description project.oneLineDesc
-					url 'http://javapinning.geekplace.eu'
-
-					scm {
-						url 'https://github.com/flowdalic/android-pinning'
-						connection 'scm:git@github.com:flowdalic/android-pinning.git'
-						developerConnection 'scm:git@github.com:flowdalic/android-pinning.git'
-					}
-
-					licenses {
-						license {
-							name 'The Apache Software License, Version 2.0'
-							url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-							distribution 'repo'
-						}
-					}
-
-					developers {
-						developer {
-							id 'flow'
-							name 'Florian Schmaus'
-						}
-					}
-				}
-			}
-		}
-	}
-
-	signing {
-		required { signingRequired }
-		sign configurations.archives
-	}
-
-	checkstyle {
-		configFile = new File(rootConfigDir, 'checkstyle.xml')
-		toolVersion = '7.7'
-	}
-}
-
-gradle.taskGraph.whenReady { taskGraph ->
-	if (signingRequired
-		&& taskGraph.allTasks.any { it instanceof Sign }) {
-		// Use Java 6's console to read from the console (no good for a CI environment)
-		def console = System.console()
-		console.printf '\n\nWe have to sign some things in this build.\n\nPlease enter your signing details.\n\n'
-		def password = console.readPassword('GnuPG Private Key Password: ')
-
-		allprojects { ext.'signing.password' = password }
-
-		console.printf '\nThanks.\n\n'
-	}
-}
-
-def getGitCommit() {
-	def dotGit = new File("$projectDir/.git")
-	if (!dotGit.isDirectory()) return 'non-git build'
-
-	def cmd = 'git describe --always --tags --dirty=+'
-	def proc = cmd.execute()
-	def gitCommit = proc.text.trim()
-	assert !gitCommit.isEmpty()
-	gitCommit
-}
-
-// Returns only the date in yyyy-MM-dd format, as otherwise, with
-// hh:mm:ss information, the manifest files would change with every
-// build, causing unnecessary rebuilds.
-def getDatestamp() {
-	def date = new Date()
-	return date.format('yyyy-MM-dd')
 }
