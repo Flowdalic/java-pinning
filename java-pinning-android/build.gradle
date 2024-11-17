@@ -15,7 +15,7 @@ android {
 		// increase versionCode with every release
 		// versionCode format:
 		// <two-digits-major><two-digits-minor><two-digits-patch><two-digits-identifier>
-		versionCode 1030100
+		versionCode 1030000
 		minSdkVersion minAndroidSdk
 		namespace 'eu.geekplace.javapinning.android'
     }
