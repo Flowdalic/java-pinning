@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014-2017 Florian Schmaus
+ * Copyright 2014-2024 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package eu.geekplace.javapinning.integrationtest;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
@@ -32,8 +33,9 @@ import org.junit.Test;
 public class IntegrationTest {
 
 	@Test
+	@SuppressWarnings({"AddressSelection"})
 	public  void main() throws NoSuchAlgorithmException, KeyManagementException, IOException {
-		SSLContext sc = JavaPinning.forPin("SHA256:a4bd7ea9bf474cc459266b82fdb07f648f5ddf4d8162baea895b91c96f831ab5");
+		SSLContext sc = JavaPinning.forPin("SHA256:1acf9d4fd9140b5ee70d86571f9da62b31a795453f439992d14aee4d05b71f45");
 
 		Socket socket = new Socket("github.com", 443);
 		SSLSocket sslSocket = (SSLSocket) sc.getSocketFactory().createSocket(socket, "github.com", 443, true);
@@ -43,7 +45,7 @@ public class IntegrationTest {
 		System.out.println(name);
 		// CHECKSTYLE:ON
 		OutputStream os = sslSocket.getOutputStream();
-		os.write("GET /".getBytes());
+		os.write("GET /".getBytes(StandardCharsets.UTF_8));
 		os.flush();
 	}
 }

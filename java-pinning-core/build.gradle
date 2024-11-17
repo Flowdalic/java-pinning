@@ -1,3 +1,8 @@
-dependencies {
-	testCompile 'junit:junit:4.12'
+plugins {
+    id 'eu.geekplace.javapinning.java-conventions'
+    id 'eu.geekplace.javapinning.android-conventions'
+    id 'eu.geekplace.javapinning.junit4-conventions'
 }
+
+description = """\
+Java Pinning's Core"""

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright 2014-2017 Florian Schmaus
+ * Copyright 2014-2024 Florian Schmaus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,8 +58,8 @@ public abstract class Pin {
 	/**
 	 * Create a new {@link Pin} from the given String.
 	 * <p>
-	 * The Pin String must be in the format <tt>[type]:[hex-string]</tt>, where
-	 * <tt>type</tt> denotes the type of the Pin and <tt>hex-string</tt> is the
+	 * The Pin String must be in the format <code>[type]:[hex-string]</code>, where
+	 * <code>type</code> denotes the type of the Pin and <code>hex-string</code> is the
 	 * binary value of the Pin encoded in hex. Currently supported types are
 	 * <ul>
 	 * <li>PLAIN</li>
@@ -72,7 +72,6 @@ public abstract class Pin {
 	 * binary representation. First the string is lower-cased, then all
 	 * whitespace characters and colons are removed before the string is decoded
 	 * to bytes.
-	 * </p>
 	 *
 	 * @param string
 	 *            the Pin String.

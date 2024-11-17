@@ -1,4 +1,11 @@
-include \
-    'java-pinning-core' \
-  , 'java-pinning-android' \
-  , 'java-pinning-java7'
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+		google()
+	}
+	includeBuild('build-logic')
+}
+
+include 'java-pinning-core',
+	'java-pinning-android',
+	'java-pinning-java11'

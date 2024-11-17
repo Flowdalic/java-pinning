@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
 from M2Crypto import X509
-import binascii
 import hashlib
 import ssl
 import sys
 
 def main(argv):
     if len(argv) != 1 and len(argv) != 2:
-        print "Usage: pin.py [<certificate_path> | <host> <port>]"
+        print("Usage: pin.py [<certificate_path> | <host> <port>]")
         return
 
     if (len(argv) == 1):
@@ -22,17 +21,17 @@ def main(argv):
     digest.update(pubkey)
     sha256 = digest.digest()
 
-    print "Calculating PIN for certificate: " + cert.get_subject().as_text()
-    print "\n"
-    print "Public Key Pins:"
-    print "----------------"
-    print "SHA256:" + binascii.hexlify(sha256)
-    print "PLAIN:" + binascii.hexlify(pubkey)
-    print "\n"
-    print "Certificate Pins:"
-    print "-----------------"
-    print "CERTSHA256:" + cert.get_fingerprint('sha256')
-    print "CERTPLAIN:" + binascii.hexlify(cert.as_der())
+    print("Calculating PIN for certificate: " + cert.get_subject().as_text())
+    print("\n")
+    print("Public Key Pins:")
+    print("----------------")
+    print("SHA256:" + sha256.hex())
+    print("PLAIN:" + pubkey.hex())
+    print("\n")
+    print("Certificate Pins:")
+    print("-----------------")
+    print("CERTSHA256:" + cert.get_fingerprint('sha256'))
+    print("CERTPLAIN:" + cert.as_der().hex())
 
 if __name__ == '__main__':
     main(sys.argv[1:])
