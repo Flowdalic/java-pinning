@@ -17,8 +17,6 @@ plugins {
 	id 'eu.geekplace.javapinning.publish-conventions'
 }
 
-version readVersionFile()
-
 ext {
 	gitCommit = getGitCommit()
 	documentationDir = new File(projectDir, 'documentation')
@@ -27,8 +25,6 @@ ext {
 	isReleaseVersion = !isSnapshot
 	junitVersion = '5.11.3'
 }
-
-group = 'eu.geekplace.javapinning'
 
 java {
 	sourceCompatibility = javaVersion
@@ -185,15 +181,4 @@ def getGitCommit() {
 	def gitCommit = proc.text.trim()
 	assert !gitCommit.isEmpty()
 	gitCommit
-}
-
-def readVersionFile() {
-	def versionFile = new File(rootDir, 'version')
-	if (!versionFile.isFile()) {
-		throw new Exception("Could not find version file")
-	}
-	if (versionFile.text.isEmpty()) {
-		throw new Exception("Version file does not contain a version")
-	}
-	versionFile.text.trim()
 }

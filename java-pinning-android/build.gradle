@@ -4,6 +4,9 @@ plugins {
 	id 'com.android.library'
 }
 
+description = """\
+Java Pinning's API for Android (min SDK level ${minAndroidSdk}"""
+
 android {
     compileSdkVersion 30
 

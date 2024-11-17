@@ -18,6 +18,10 @@ repositories {
 	mavenLocal()
 }
 
+group = 'eu.geekplace.javapinning'
+
+version readVersionFile()
+
 def getAndroidRuntimeJar(androidApiLevel) {
 	def androidHome = getAndroidHome()
 	def androidJar = new File("$androidHome/platforms/android-${androidApiLevel}/android.jar")
@@ -36,4 +40,15 @@ def getAndroidHome() {
 	def androidHome = new File(androidHomeEnv)
 	if (!androidHome.isDirectory()) throw new Exception("Environment variable ANDROID_HOME is not pointing to a directory")
 	return androidHome
+}
+
+def readVersionFile() {
+	def versionFile = new File(rootDir, 'version')
+	if (!versionFile.isFile()) {
+		throw new Exception("Could not find version file")
+	}
+	if (versionFile.text.isEmpty()) {
+		throw new Exception("Version file does not contain a version")
+	}
+	versionFile.text.trim()
 }
