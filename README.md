@@ -76,7 +76,7 @@ How to add this as dependency
 ### Gradle
 
 ```groovy
-compile('eu.geekplace.javapinning:java-pinning-core:1.2.0')
+compile('eu.geekplace.javapinning:java-pinning-core:1.3.0')
 ```
 
 ### Maven
@@ -85,7 +85,7 @@ compile('eu.geekplace.javapinning:java-pinning-core:1.2.0')
 <dependency>
 	<groupId>eu.geekplace.javapinning</groupId>
 	<artifactId>java-pinning-core</artifactId>
-	<version>1.2.0</version>
+	<version>1.3.0</version>
 </dependency>
 ```
 
@@ -152,6 +152,10 @@ gradle check
 
 Changelog
 ---------
+
+### 1.3.0
+
+- Require Java 11
 
 ### 1.2.0
 
